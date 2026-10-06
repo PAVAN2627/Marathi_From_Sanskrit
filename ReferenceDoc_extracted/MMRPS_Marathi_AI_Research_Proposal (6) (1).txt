@@ -1,0 +1,146 @@
+--- ppt/slides/slide1.xml ---
+A Hybrid AI-Based Framework for
+Reconstructing the Evolution of
+Marathi from Sanskrit
+Department 
+of Information Technology
+DOMAIN
+AI & NLP
+DURATION
+BUDGET
+AREA
+Computational Linguistics
+MMCOE · Karvenagar, Pune – 52
+
+--- ppt/slides/slide2.xml ---
+Introduction & Motivation
+Marathi at a Glance
+95+ million speakers worldwide
+Official language of Maharashtra
+Evolved from Sanskrit via Maharashtri 
+Prakrit & Apabhraṃśa
+Rich literary tradition dating back 1,000+ years
+11th most spoken language globally
+The Problem
+Historical transformations 
+documented manually by scholars
+No computationally grounded, explainable AI framework exists
+Neural translation systems lack linguistic interpretability
+Sanskrit–Marathi diachronic 
+datasets are absent
+Indic languages underrepresented in computational linguistics
+Sanskrit
+→
+Prakrit
+→
+Apabhraṃśa
+→
+Marathi
+
+--- ppt/slides/slide3.xml ---
+Research Gaps
+01
+No Computational Framework
+No AI system models Marathi's diachronic evolution from Sanskrit
+02
+No Hybrid Model
+Transformer models lack linguistically grounded phonological rules
+03
+Missing Datasets
+No curated Sanskrit–Marathi aligned lexical dataset for AI training
+04
+No Explainability
+Existing NLP outputs lack step-wise phonological transformation traces
+05
+Semantic Drift Unmodeled
+Meaning shifts between Sanskrit roots and Marathi forms not captured
+06
+No Open Toolkit
+No open-source framework for Indic computational historical linguistics
+
+--- ppt/slides/slide4.xml ---
+Project Objectives
+Design a hybrid architecture integrating rule-based phonology with Transformer neural modelling
+Formally encode Sanskrit–Marathi phonological & morphological transformation rules (vowel shifts, schwa deletion, assimilation)
+Develop phoneme-level modelling using IPA-based feature embeddings for structural sound-change learning
+Construct a curated, aligned Sanskrit–Marathi diachronic lexical dataset
+Model semantic drift between Sanskrit roots and Marathi derivatives using embedding-based similarity
+Implement an explainability module generating interpretable, step-wise phonological transformation outputs
+Evaluate using CER, Phonetic Edit Distance, BLEU/chrF scores + expert linguistic validation
+Release an open-source computational historical linguistics toolkit for Marathi
+
+--- ppt/slides/slide5.xml ---
+Proposed System Architecture
+1
+Linguistic Rule Encoding Layer
+Formal computational encoding of historical phonological rules: vowel shifts, consonant simplification, schwa deletion, assimilation, morphophonemic alternations
+2
+Phoneme-Level Neural Modelling
+Transformer architecture trained at phoneme level with IPA-based feature embeddings — learns structural phonetic evolution patterns, not surface orthography
+3
+Semantic Drift Modelling Layer
+Contrastive representation learning captures semantic proximity and gradual meaning shifts between Sanskrit roots and Marathi derivatives
+4
+Explainability & Traceability Module
+Generates interpretable step-wise transformation outputs showing intermediate phonological stages — transparent, not opaque neural predictions
+INPUT: Sanskrit Root
+OUTPUT: Reconstructed Marathi Form + Transformation Trace
+
+--- ppt/slides/slide6.xml ---
+Flow Diagram
+Example
+
+--- ppt/slides/slide7.xml ---
+Methodology & Work Plan (12 Months)
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+Phase 1  ·  M1–M2
+Literature Review & Data Collection
+Phase 2  ·  M2–M3
+Linguistic Rule Encoding
+Phase 3  ·  M3–M4
+Dataset Construction
+Phase 4  ·  M4–M7
+Model Development (Hybrid Transformer)
+Phase 5  ·  M7–M9
+Semantic Drift Modelling
+Phase 6  ·  M9–M10
+Evaluation & Linguistic Validation
+Phase 7  ·  M10–M12
+Deployment, Publication & Dissemination
+
+--- ppt/slides/slide8.xml ---
+Expected Outcomes & Impact
+Hybrid AI Framework
+Rule-aware Transformer model integrating phonological rules with neural sequence learning — first of its kind for Marathi
+Diachronic Dataset
+Curated Sanskrit–Marathi aligned lexical dataset released openly for the research community
+Explainability Module
+Step-wise phonological transformation traces providing interpretable AI reasoning for historical linguistics
+Quantitative Evaluation
+CER, Phonetic Edit Distance, BLEU/chrF + expert linguistic validation ensuring scientific rigor
+Research Publications
+≥1 paper in Scopus/SCI indexed journal + presentation at national/international conference
+Open-Source Toolkit
+Documented toolkit for computational historical reconstruction of Indic languages, seeding future research
+
+--- ppt/slides/slide9.xml ---
+Broader Impact & Contributions
+Explainable AI for Low-Resource Languages
+Advances XAI methodologies applicable to all Indo-Aryan languages, creating replicable models for linguistic communities worldwide
+Computational Historical Linguistics
+Establishes the first AI benchmark for Sanskrit–Marathi diachronic reconstruction, enabling systematic comparative studies
+Digital Preservation of Indian Heritage
+Provides tools for restoring historical manuscripts, enabling digital humanities scholars to work at scale with AI assistance
+Educational Applications
+Framework enables interactive language learning tools demonstrating the deep historical connections between Sanskrit and modern Marathi

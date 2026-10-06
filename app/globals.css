@@ -1,0 +1,189 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Noto+Serif+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@layer base {
+  :root {
+    --background: 210 20% 99%;
+    --foreground: 215 28% 17%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 28% 17%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 28% 17%;
+    --primary: 215 45% 24%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 210 16% 95%;
+    --secondary-foreground: 215 28% 17%;
+    --muted: 210 16% 94%;
+    --muted-foreground: 215 12% 47%;
+    --accent: 199 76% 42%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 215 16% 90%;
+    --input: 215 16% 90%;
+    --ring: 199 76% 42%;
+    --chart-1: 199 76% 42%;
+    --chart-2: 142 71% 45%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 280 60% 55%;
+    --chart-5: 0 72% 51%;
+    --radius: 0.625rem;
+
+    --sanskrit-color: 215 45% 28%;
+    --prakrit-color: 180 50% 32%;
+    --apabhramsha-color: 142 55% 35%;
+    --old-marathi-color: 38 72% 40%;
+    --modern-marathi-color: 199 76% 42%;
+  }
+
+  .dark {
+    --background: 215 32% 10%;
+    --foreground: 210 20% 92%;
+    --card: 215 30% 13%;
+    --card-foreground: 210 20% 92%;
+    --popover: 215 30% 13%;
+    --popover-foreground: 210 20% 92%;
+    --primary: 199 60% 55%;
+    --primary-foreground: 215 32% 10%;
+    --secondary: 215 25% 18%;
+    --secondary-foreground: 210 20% 92%;
+    --muted: 215 25% 18%;
+    --muted-foreground: 215 12% 62%;
+    --accent: 199 60% 55%;
+    --accent-foreground: 215 32% 10%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 215 22% 22%;
+    --input: 215 22% 22%;
+    --ring: 199 60% 55%;
+    --chart-1: 199 60% 55%;
+    --chart-2: 142 55% 50%;
+    --chart-3: 38 80% 55%;
+    --chart-4: 280 55% 60%;
+    --chart-5: 0 62% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Devanagari text styling */
+  .devanagari {
+    font-family: 'Noto Sans Devanagari', 'Noto Serif Devanagari', sans-serif;
+    font-feature-settings: 'kern';
+  }
+
+  .devanagari-serif {
+    font-family: 'Noto Serif Devanagari', 'Noto Sans Devanagari', serif;
+  }
+
+  .mono {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-sm border border-border/60;
+  }
+
+  .prototype-badge {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700 border border-amber-200;
+  }
+
+  .mock-badge {
+    @apply inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground;
+  }
+
+  .section-heading {
+    @apply text-lg font-semibold tracking-tight text-foreground;
+  }
+
+  .stage-sanskrit { @apply text-[hsl(var(--sanskrit-color))]; }
+  .stage-prakrit { @apply text-[hsl(var(--prakrit-color))]; }
+  .stage-apabhramsha { @apply text-[hsl(var(--apabhramsha-color))]; }
+  .stage-old-marathi { @apply text-[hsl(var(--old-marathi-color))]; }
+  .stage-modern-marathi { @apply text-[hsl(var(--modern-marathi-color))]; }
+
+  .stage-dot-sanskrit { @apply bg-[hsl(var(--sanskrit-color))]; }
+  .stage-dot-prakrit { @apply bg-[hsl(var(--prakrit-color))]; }
+  .stage-dot-apabhramsha { @apply bg-[hsl(var(--apabhramsha-color))]; }
+  .stage-dot-old-marathi { @apply bg-[hsl(var(--old-marathi-color))]; }
+  .stage-dot-modern-marathi { @apply bg-[hsl(var(--modern-marathi-color))]; }
+}
+
+@keyframes pathway-draw {
+  from { stroke-dashoffset: 100%; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes node-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.03); opacity: 0.92; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out forwards;
+}
+
+.animate-node-pulse {
+  animation: node-pulse 2s ease-in-out infinite;
+}
+
+.shimmer-bg {
+  background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--secondary)) 50%, hsl(var(--muted)) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* React Flow custom styling */
+.react-flow__node {
+  font-family: 'Inter', sans-serif;
+}
+
+.react-flow__edge-path {
+  stroke: hsl(var(--muted-foreground));
+  stroke-width: 1.5;
+}
+
+.react-flow__attribution {
+  display: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}

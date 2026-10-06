@@ -1,0 +1,247 @@
+A Hybrid Artificial Intelligence Framework for Reconstructing the Diachronic Phonological and Semantic Evolution of Marathi from Sanskrit
+[Author Name 1], [Author Name 2], [Author Name 3]
+Department of Information Technology, Marathwada Mitra Mandal’s College of Engineering, Karvenagar, Pune, Maharashtra, India
+Center for Advanced Natural Language Processing and Computational Historical Linguistics
+Email: mmrps-research@mmcoe.edu.in
+Abstract—Marathi evolved systematically from Old Indo-Aryan (Sanskrit) through Maharashtri Prakrit and Apabhraṃśa into New Indo-Aryan, yet no computational framework simulates this trajectory in an interpretable way. Conventional neural sequence-to-sequence models behave as black boxes, often hallucinate phonotactically illegal forms, and generalize poorly on low-resource historical corpora. This paper proposes a hybrid artificial intelligence framework that couples a rule-based engine of historical sound laws with a phoneme-level Transformer grounded in articulatory features from the International Phonetic Alphabet (IPA). The model uses a rule-constrained cross-attention mechanism, a contrastive objective for diachronic semantic drift, and a derivation module that outputs intermediate phonetic stages. Evaluated on a curated corpus of 12,500 aligned Sanskrit–Marathi cognate pairs drawn from classical lexicographical sources, the framework reaches a Character Error Rate of 6.12%, a Phonetic Edit Distance of 0.41, and a chrF++ score of 89.43, clearly outperforming rule-only, recurrent, and unconstrained Transformer baselines. The work contributes an interpretable paradigm for computational historical linguistics, low-resource Indic language technology, and digital preservation of linguistic heritage.
+Keywords—Computational Historical Linguistics, Explainable Artificial Intelligence, Transformer Architectures, Indo-Aryan Phonology, Semantic Drift Modeling.
+I. Introduction
+Modern Indo-Aryan languages are among the best-documented yet least computationally formalized products of language change. Marathi, spoken by more than 80 million people and recognized as a classical language of India since 2024 [1], descends from Old Indo-Aryan (OIA, chiefly Classical and Vedic Sanskrit) through Middle Indo-Aryan (MIA) vernaculars [2]–[4]. Its lineage passes through the regional Prakrits, most prominently Maharashtri Prakrit, the administrative and poetic medium of the Satavahana period, and then through regional Apabhraṃśa varieties, before appearing as Old Marathi in epigraphic records of the eleventh and twelfth centuries and finally as Modern Marathi [2], [4]. Classical philology showed that this multi-millennial continuum followed regular sound laws [5], [6]. These include weakening and elision of intervocalic single stops, assimilation of heterogeneous consonant clusters into geminates, later degemination with compensatory lengthening of the preceding vowel, retroflexion of dental sonorants, emergence of the retroflex lateral, and deletion of word-final vowels [2]–[4].
+Despite this exhaustive manual documentation, computational linguistics has largely treated language as a synchronic, static object. Contemporary Natural Language Processing (NLP) concentrates on high-resource tasks such as machine translation, classification, dialogue, and speech recognition. Self-attention Transformers [7] define the state of the art on these tasks, but applying them to diachronic reconstruction raises methodological hurdles. Standard sequence models operate on orthographic characters or statistically derived subwords such as byte-pair encodings [8]. These surface units hide articulatory and phonotactic structure and treat phonemes as arbitrary integers rather than bundles of distinctive features. Without the inductive bias of regular sound change, such models often predict phonotactically illegal segments and generalize poorly from small etymological datasets [9].
+A second deficiency is opacity. In historical linguistics, the validity of a derivation rests on procedural traceability. A reconstruction cannot merely assert that Sanskrit hasta yields Marathi hāt; it must show that the cluster /st/ assimilated to the Maharashtri Prakrit geminate hattha, and that New Indo-Aryan degemination then lengthened the preceding vowel to give the modern form. Black-box neural systems cannot justify such steps. Language change also involves semantic drift, as words broaden, narrow, or shift metaphorically over centuries. Indic NLP initiatives such as AI4Bharat have produced valuable transliteration and translation resources [10], but diachronically aligned etymological corpora and models for Indic historical evolution are still lacking.
+Research gap. No existing framework unites explicit historical sound-law knowledge, articulatory feature grounding, semantic drift modeling, and auditable derivation output for the Sanskrit-to-Marathi trajectory.
+Objectives. This study aims to (i) formalize attested OIA→MIA→NIA sound laws as an executable rule engine; (ii) couple that engine with a phoneme-level Transformer over IPA articulatory features; (iii) model semantic drift between ancient etyma and modern reflexes; and (iv) produce human-auditable derivation traces.
+Contributions. The main contributions are:
+a rule-constrained cross-attention mechanism that penalizes phonotactically illegal transitions while retaining neural flexibility for irregular items;
+an integrated architecture combining PanPhon articulatory features, a contrastive semantic drift objective, and a traceable derivation module;
+a curated benchmark of 12,500 aligned Sanskrit–Marathi cognate pairs with intermediate Prakrit and Apabhraṃśa targets; and
+an empirical evaluation with ablations showing consistent gains over symbolic and neural baselines, plus a planned open-source toolkit.
+The remainder of this paper is organized as follows. Section II reviews related work, Section III presents the methodology, Section IV describes the system architecture, Section V details the implementation, Section VI reports results, Section VII discusses limitations, and Section VIII concludes.
+II. Literature Review and Related Work
+A. Comparative philology. The systematic study of Indo-Aryan diachronic phonology grew out of nineteenth- and twentieth-century comparative philology. Bloch’s La formation de la langue marathe established the phonetic correspondences that set Marathi apart from northern and eastern Indo-Aryan, including elision of intervocalic voiceless stops, reduction of sibilants, and retention of the retroflex lateral [2]. Turner’s Comparative Dictionary of the Indo-Aryan Languages (CDIAL) cataloged thousands of cognate sets tracing Sanskrit roots through Prakrit intermediaries to modern languages [3], and Masica synthesized pan-Indic shifts in syllable weight, vowel length, and case syncretism [4]. These works remain descriptive and paper-bound: they offer no algorithm that predicts unseen derivations, validates proposed etymologies, or plugs into language technology.
+B. Statistical and phylogenetic methods. Early computational work relied on alignment algorithms, edit-distance variants [11], and Bayesian phylogenetic trees that estimate divergence dates and cognate clusters [12]. These methods typically operate on binary cognate presence/absence matrices and therefore bypass the phonetic mechanics of sound change.
+C. Neural proto-language reconstruction. Meloni et al. applied recurrent encoder-decoders with attention [13] to reconstruct Proto-Romance forms from modern reflexes [14]. Kim et al. moved to Transformer architectures for multi-daughter reflex alignment [15], and Lu et al. introduced the Daughter-to-Proto-to-Daughter (DPD) framework, which uses cycle-consistent reflex prediction to improve reconstruction under limited supervision [9]. Unconstrained Transformers, however, need large corpora; on small historical datasets they hallucinate sequences that violate the Neogrammarian regularity hypothesis [5], and treating phonemes as atomic tokens discards the physical properties of articulation.
+D. Articulatory feature representations. Mortensen et al. introduced PanPhon, which maps more than 5,000 IPA segments to 24 articulatory subsegmental features [16]. PanPhon has supported phonologically structured modeling in dialectology and speech technology, but it has not previously been embedded in Transformer models for Indo-Aryan diachronic reconstruction.
+E. Indic NLP. The Indic NLP ecosystem has matured through AI4Bharat, which released the Aksharantar transliteration corpus of roughly 26 million pairs, translation models, and benchmarks [10]. These resources focus almost exclusively on synchronic tasks in modern scheduled languages. Sanskrit tools concentrate on sandhi splitting, compound analysis, and parsing, while Marathi tools target tagging, sentiment, and named entity recognition. No existing framework bridges these epochs by modeling the phonological transitions and semantic drift that link Sanskrit roots to Marathi derivatives.
+TABLE IComparison of Research Paradigms
+Paradigm
+Representative work
+Key limitation
+Comparative philology
+Bloch [2], Turner [3], Masica [4]
+Descriptive; not algorithmic or scalable
+Statistical / phylogenetic
+Levenshtein [11], Bouckaert et al. [12]
+Coarse cognate matrices; no phonological rules
+Neural sequence transduction
+Meloni [14], Kim [15], Lu [9]
+Black-box; hallucination on small corpora
+Indic NLP toolkits
+AI4Bharat, Aksharantar [10]
+Synchronic only; no diachronic modeling
+Proposed framework
+This work
+Needs curated intermediate alignments; added decoding overhead
+In summary, an explainable hybrid that unites historical phonological rule formalisms with neural sequence modeling remains a clear research need, which the present work addresses.
+III. Proposed Methodology
+A. Problem formulation. The task is cast as rule-constrained, phonetically grounded sequence transduction. Let a Sanskrit etymon be an ordered phoneme sequence  with each , the OIA phonemic inventory. The goal is to derive the Modern Marathi reflex  with , together with an explicit derivation trace  through attested MIA stages, specifically Maharashtri Prakrit  and Apabhraṃśa .
+B. Articulatory input embedding. To operate on physical phonetic properties rather than arbitrary tokens, each phoneme is projected into a composite continuous space that concatenates a learned token embedding with a 24-dimensional PanPhon feature vector [16]:
+(1)
+Here  is the categorical embedding;  encodes distinctive attributes such as consonantal, sonorant, voiced, continuant, nasal, retroflex, and aspirated;  projects to the model dimension; and  is a sinusoidal positional encoding.
+C. Historical phonological rule engine. The symbolic core is a deterministic engine that formalizes attested sound laws as context-sensitive rewrite rules over articulatory matrices [17]:
+(2)
+where feature bundle  becomes  between contexts  and . Five sound-change categories are implemented.
+Rule 1 (R1), intervocalic stop weakening and elision. Non-initial single stops between vowels weaken and are elided in MIA, producing hiatus or glides [2], as in Sanskrit kāka → Prakrit kāa:
+(3)
+Rule 2 (R2), consonant cluster assimilation. Heterogeneous clusters assimilate toward the more sonorous or dental/retroflex-dominant segment, yielding geminates [3], as in Sanskrit bhakta → Prakrit bhatta and karman → kamma:
+(4)
+Rule 3 (R3), degemination with compensatory lengthening. The defining MIA-to-NIA change simplifies Prakrit geminates and lengthens the preceding short vowel  to preserve syllable weight [4]:
+(5)
+as in Sanskrit hasta → Prakrit hattha → Marathi hāt and sapta → satta → sāt.
+Rule 4 (R4), conditioned retroflexion. Intervocalic dental nasals become retroflex, and the dental lateral becomes the retroflex lateral, a hallmark of the southern Indo-Aryan group [2]:
+(6)
+(7)
+giving, for example, Sanskrit pānīya → Marathi pāṇī and phala → phaḷ.
+Rule 5 (R5), terminal apocope and schwa deletion. Word-final short vowels and unaccented non-initial schwas are deleted in the transition to modern speech [4], for example Prakrit hattha → Marathi hāt:
+(8)
+D. Rule-constrained cross-attention. The neural core is an encoder-decoder Transformer [7]. A bidirectional encoder maps the embedded source to hidden states . During decoding, cross-attention is biased by a rule constraint matrix :
+(9)
+with , , , and a learnable positive scale . Each entry is the log-probability of alignment under attested sound laws:
+(10)
+If candidate  is a valid historical reflex of  in context , then . If the change is historically impermissible, for example an unconditioned shift from a velar stop to a labiodental fricative, then , which removes the alignment from the softmax distribution.
+E. Semantic drift objective. Let  be the contextual embedding of a Sanskrit root and  that of its Marathi reflex. Over a mini-batch , an InfoNCE contrastive loss [18] aligns each etymon with its descendant:
+(11)
+where  is cosine similarity and  is a learnable temperature.
+F. Composite training loss. Training balances token-level cross-entropy, an articulatory feature divergence term, and the semantic drift term:
+(12)
+(13)
+where  and  weight articulatory accuracy and semantic consistency.
+G. Inference and derivation tracking. Inference runs in five stages. (1) The Sanskrit input is mapped to IPA and PanPhon features and projected to embeddings. (2) The encoder produces contextual states. (3) The rule engine executes a forward pass, deriving Prakrit and Apabhraṃśa hypotheses and building . (4) The decoder generates the Marathi phoneme sequence autoregressively with rule-constrained cross-attention. (5) The explainability module traces decoder attention to specific rule firings and outputs the reflex together with a step-by-step derivation trace .
+IV. System Architecture and Design
+The system has four tiers: the Ingestion and Phonetic Feature Layer, the Linguistic Rule Formulation Layer, the Rule-Constrained Neural Core, and the Traceable Explanation Layer (Fig. 1).
+Overall system architecture and data flow.
+Ingestion and Phonetic Feature Layer. Raw Sanskrit Devanagari entries undergo Unicode NFC normalization to resolve virama and anusvara variants, are converted to IPA streams by a rule-based grapheme-to-phoneme (G2P) converter for Classical Sanskrit, and are linked to 24-dimensional PanPhon vectors. Downstream modules therefore operate on phonetic features rather than orthography.
+Linguistic Rule Formulation Layer. A compiled bank of deterministic finite-state rewrite rules applies the sound laws in sequence, simulating lenition, cluster assimilation, degemination, compensatory lengthening, and vowel shifts. It emits two outputs: intermediate Prakrit and Apabhraṃśa hypotheses, and the transition prior matrix  that supplies log-penalties to the decoder.
+Rule-Constrained Neural Core. A multi-layer bidirectional Transformer encoder converts the articulatory-projected source into contextual vectors. An autoregressive decoder generates the Marathi phoneme sequence with cross-attention heads biased by . In parallel, a contrastive projection head computes semantic drift representations with the InfoNCE loss.
+Traceable Explanation Layer. As the decoder selects phonemes, this layer records active attention weights and matches them to rule identifiers from the symbolic engine. The phoneme stream is converted to Modern Marathi Devanagari through an inverted G2P mapping, and the final output contains both the reflex and a derivation log of every intermediate stage and applied sound law.
+TABLE IISystem Modules and Their Roles
+Module
+Core processing
+Output
+MOD-01 Normalizer and IPA tokenizer
+NFC normalization, virama resolution, rule-based G2P
+IPA stream , feature matrix 
+MOD-02 Rule engine (FST)
+Finite-state transducers for lenition, gemination, lengthening, vowel shift
+Hypotheses ; prior 
+MOD-03 Transformer encoder
+Bidirectional self-attention over phonetic context
+Encoder states 
+MOD-04 Rule-guided decoder
+Autoregressive decoding, cross-attention biased by 
+Predicted sequence 
+MOD-05 Semantic projector
+Dual-encoder projection trained with InfoNCE
+Drift score, aligned vectors
+MOD-06 Derivation auditor
+Aligns attention with rule-firing logs
+Trace  and Devanagari form
+During inference the root is normalized and converted to IPA in MOD-01 and then processed in parallel by MOD-02 and MOD-03. MOD-04 merges their outputs to decode the target sequence, MOD-05 checks semantic consistency, and MOD-06 correlates decoder alignments with rule logs to emit the reflex and its complete derivation trace.
+V. Implementation
+A. Technology stack. The framework is implemented in Python 3.11 with PyTorch 2.3 [19] and Hugging Face Transformers [20], using PyTorch Lightning for training management. Articulatory features come from the PanPhon library [16], and G2P conversion for Classical Sanskrit uses customized Epitran backends [21]. Devanagari–IAST transliteration and normalization use the IndicNLP Library [22]. Contrastive semantic embeddings are initialized from fastText [23] models trained on Sanskrit text collections and the Marathi IndicCorp dataset [24], then refined through learned linear projection heads. Cognate sets, rule tables, and derivations are stored in PostgreSQL with JSONB indexing.
+B. Dataset. Because no machine-readable Sanskrit-to-Marathi diachronic dataset exists, a corpus was curated from Turner’s CDIAL [3], Bloch’s The Formation of the Marathi Language [2], and Molesworth’s Marathi-English Dictionary [25]. Table III summarizes the 12,500 cognate pairs and the 80/10/10 split. Representative pairs include adya → āj and karpaṭa → kāpaḍ (regular sound change), kṣetra → shet (cluster reduction), karma → karma (phonologically adapted tatsama), and ghoṭaka → ghoḍā (substrate-interacting).
+TABLE IIICurated Sanskrit–Marathi Benchmark Dataset
+Lexical stratum
+Total
+Train
+Val.
+Test
+Tadbhava (regular change)
+8,250
+6,600
+825
+825
+Tadbhava (complex clusters)
+2,450
+1,960
+245
+245
+Tatsama (adapted)
+1,200
+960
+120
+120
+Deshya / substrate
+600
+480
+60
+60
+Total
+12,500
+10,000
+1,250
+1,250
+C. Preprocessing. A four-stage protocol is applied. First, Devanagari text is normalized to remove encoding inconsistencies and zero-width joiners and to standardize anusvara. Second, inflectional endings are stripped to isolate bare roots. Third, roots are converted to IPA sequences, with a subset of 2,000 items independently verified by linguists. Fourth, each Sanskrit root is aligned with its Prakrit form, Apabhraṃśa reflex, and Modern Marathi derivative to give multi-stage targets.
+D. Model and training configuration. The phoneme Transformer has a 4-layer encoder and a 4-layer decoder with , feed-forward dimension , and . Dropout is 0.15 to limit overfitting on the low-resource data. The projection layer maps 24 PanPhon features concatenated with 64-dimensional learned phoneme embeddings to , and the loss weights are  and . Training uses AdamW [26] with an initial learning rate of , cosine decay, 1,000 warmup steps, 80 epochs, and batch size 64 on a single NVIDIA RTX 4090 GPU (24 GB).
+VI. Results and Discussion
+A. Metrics and baselines. Four metrics are reported: Character Error Rate (CER), the phoneme-level normalized Levenshtein distance between target and prediction; Phonetic Edit Distance (PED), computed with PanPhon’s articulatory feature distance to measure phonetic similarity [16]; Phoneme BLEU, the n-gram overlap of predicted phoneme sequences; and chrF++ [27], a character n-gram F-score suited to morphologically rich languages. Four baselines were used: (i) a deterministic rule FST engine without learning; (ii) a bidirectional LSTM with Bahdanau attention [13]; (iii) a vanilla 4-layer Transformer over discrete phonemes with no articulatory features or rule constraints; and (iv) an unconstrained reflex Transformer adapted from proto-form reconstruction work [9], [15].
+TABLE IVPerformance on the Test Set (1,250 Pairs)
+Model
+CER (%) ↓
+PED ↓
+P-BLEU ↑
+chrF++ ↑
+Rule FST engine
+18.42
+1.34
+64.12
+71.05
+BiLSTM + attention
+14.85
+0.98
+71.30
+76.82
+Vanilla Transformer
+11.20
+0.76
+77.45
+81.60
+Unconstrained reflex Transformer
+9.84
+0.62
+80.12
+84.15
+Hybrid, no semantic loss ()
+7.15
+0.48
+84.80
+87.65
+Hybrid, no rule bias ()
+8.32
+0.55
+82.60
+85.90
+Proposed full hybrid
+6.12
+0.41
+87.25
+89.43
+Character Error Rate of all systems on the test set (lower is better).
+B. Quantitative analysis. The full hybrid framework outperforms both symbolic and unconstrained neural baselines on every metric (Table IV, Fig. 2). The rule FST engine reaches 18.42% CER; it models regular changes accurately but fails on irregular items, loanwords, and late dialectal innovations. The vanilla Transformer lowers CER to 11.20% but keeps a high PED of 0.76 because it produces articulatorily distant phonemes. Against the strongest neural baseline, the unconstrained reflex Transformer, the full model cuts CER from 9.84% to 6.12%, an absolute reduction of 3.72 points (37.8% relative), and lowers PED from 0.62 to 0.41.
+C. Ablation study. Setting  removes the rule-biased attention and raises CER by 2.20 points (6.12% to 8.32%), showing that rule bias keeps the decoder out of phonotactically illegal output space. Setting  removes the contrastive drift loss and raises CER to 7.15%, indicating that semantic grounding helps choose among competing reflexes for polysemous roots. Relative to the vanilla Transformer, the full model reduces PED from 0.76 to 0.41, so its remaining errors fall mostly among phonetically similar segments.
+D. Qualitative derivation audit. Table V shows reconstructed forms and the sound laws logged for each. For hasta, the module records cluster assimilation (R2) giving hattha, then degemination with compensatory lengthening (R3) and final vowel deletion (R5), matching the attested pathway. Unlike black-box models, the framework exposes every applied law, which meets the interpretability requirement of historical linguistics.
+TABLE VSample Reconstructions and Fired Sound Laws
+Sanskrit
+Prakrit
+Reconstructed Marathi
+Laws fired
+hasta (हस्त)
+hattha
+hāt (हात)
+R2, R3, R5
+bhakta (भक्त)
+bhatta
+bhāt (भात)
+R2, R3, R5
+pānīya (पानीय)
+pāṇia
+pāṇī (पाणी)
+R4, R1
+sarpa (सर्प)
+sappa
+sāp (साप)
+R2, R3, R5
+VII. Limitations
+Several constraints remain. First, corpus scale: 12,500 cognate pairs is large for historical linguistics but modest by modern NLP standards, which limits resolution of rare lexical exceptions. Second, Marathi was shaped by contact with Dravidian languages, which contributed non-Indo-European deshya vocabulary and influenced retroflexion; because the rule engine encodes Indo-Aryan sound laws, accuracy drops on loanwords and substrate-influenced items. Third, semantic changes such as metaphorical extension and pejoration are non-deterministic and hard to capture with continuous embeddings alone. Fourth, building and applying rule constraint matrices during decoding adds latency compared with unconstrained Transformer inference. Finally, the random stratified split may let related root families appear in both training and test sets; evaluation on root-family-disjoint splits is needed to confirm generalization to truly unseen etymologies.
+VIII. Conclusion and Future Work
+This paper presented a hybrid artificial intelligence framework that reconstructs the diachronic evolution of Marathi lexical forms from Sanskrit roots, bridging traditional historical linguistics and neural sequence modeling. By combining a symbolic engine of Indo-Aryan sound laws with an IPA-grounded Transformer, the architecture addresses three failure modes of unconstrained neural models: phonological hallucination, lack of explainability, and poor generalization on low-resource historical corpora.
+Integrating PanPhon articulatory features with rule-constrained cross-attention achieved a 6.12% CER and a 0.41 PED on a curated corpus of 12,500 cognate pairs, outperforming all baselines, and ablations confirmed that both the rule bias and the semantic drift objective contribute. The framework also emits interpretable derivation traces that show intermediate Maharashtri Prakrit and Apabhraṃśa stages with the rule identifiers applied.
+Future work will pursue four directions. First, the architecture will be extended to a multi-task phylogenetic model that traces the divergence of sister New Indo-Aryan languages, including Gujarati, Hindi, Konkani, and Bengali, from shared MIA etyma. Second, cycle-consistency objectives between daughter reflexes and ancestral forms [9] will support unsupervised recovery of unattested intermediate dialects without exhaustive gold annotations. Third, the engine will be interfaced with optical character recognition to help epigraphers restore and interpret damaged Modi-script and Devanagari inscriptions and manuscripts. Finally, the dataset, rule definitions, and pretrained models will be released as an open-source Python library for Indic computational historical linguistics and cultural preservation.
+References
+[1]Press Information Bureau, Government of India, “Cabinet approves conferring the status of Classical Language to Marathi, Pali, Prakrit, Assamese and Bengali,” Oct. 3, 2024.
+[2]J. Bloch, La formation de la langue marathe. Paris, France: Champion, 1920.
+[3]R. L. Turner, A Comparative Dictionary of the Indo-Aryan Languages. London, U.K.: Oxford Univ. Press, 1966.
+[4]C. P. Masica, The Indo-Aryan Languages. Cambridge, U.K.: Cambridge Univ. Press, 1991.
+[5]H. Osthoff and K. Brugmann, Morphologische Untersuchungen auf dem Gebiete der indogermanischen Sprachen, vol. 1. Leipzig, Germany: Hirzel, 1878.
+[6]J. Bloch, The Formation of the Marathi Language, D. R. Chanana, Trans. Delhi, India: Motilal Banarsidass, 1970.
+[7]A. Vaswani et al., “Attention is all you need,” in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), 2017, pp. 5998–6008.
+[8]R. Sennrich, B. Haddow, and A. Birch, “Neural machine translation of rare words with subword units,” in Proc. 54th Annu. Meeting Assoc. Comput. Linguistics (ACL), 2016, pp. 1715–1725.
+[9]L. Lu, P. Xie, and D. R. Mortensen, “Semisupervised neural proto-language reconstruction,” in Proc. 62nd Annu. Meeting Assoc. Comput. Linguistics (ACL), 2024.
+[10]Y. Madhani et al., “Aksharantar: Open Indic-language transliteration datasets and models for the next billion users,” in Findings Assoc. Comput. Linguistics: EMNLP, 2023.
+[11]V. I. Levenshtein, “Binary codes capable of correcting deletions, insertions, and reversals,” Sov. Phys. Dokl., vol. 10, no. 8, pp. 707–710, 1966.
+[12]R. Bouckaert et al., “Mapping the origins and expansion of the Indo-European language family,” Science, vol. 337, no. 6097, pp. 957–960, 2012.
+[13]D. Bahdanau, K. Cho, and Y. Bengio, “Neural machine translation by jointly learning to align and translate,” in Proc. Int. Conf. Learn. Represent. (ICLR), 2015.
+[14]C. Meloni, S. Ravfogel, and Y. Goldberg, “Ab antiquo: Neural proto-language reconstruction,” in Proc. NAACL-HLT, 2021, pp. 4460–4473.
+[15]Y. M. Kim, K. Chang, C. Cui, and D. R. Mortensen, “Transformed protoform reconstruction,” in Proc. 61st Annu. Meeting Assoc. Comput. Linguistics (ACL), 2023, pp. 24–38.
+[16]D. R. Mortensen, P. Littell, A. Bharadwaj, K. Goyal, C. Dyer, and L. Levin, “PanPhon: A resource for mapping IPA segments to articulatory feature vectors,” in Proc. 26th Int. Conf. Comput. Linguistics (COLING), 2016, pp. 3475–3484.
+[17]N. Chomsky and M. Halle, The Sound Pattern of English. New York, NY, USA: Harper & Row, 1968.
+[18]A. van den Oord, Y. Li, and O. Vinyals, “Representation learning with contrastive predictive coding,” arXiv:1807.03748, 2018.
+[19]A. Paszke et al., “PyTorch: An imperative style, high-performance deep learning library,” in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS), 2019.
+[20]T. Wolf et al., “Transformers: State-of-the-art natural language processing,” in Proc. EMNLP: Syst. Demonstrations, 2020, pp. 38–45.
+[21]D. R. Mortensen, S. Dalmia, and P. Littell, “Epitran: Precision G2P for many languages,” in Proc. 11th Int. Conf. Lang. Resour. Eval. (LREC), 2018.
+[22]A. Kunchukuttan, “The IndicNLP Library,” 2020. [Online]. Available: https://github.com/anoopkunchukuttan/indic_nlp_library
+[23]P. Bojanowski, E. Grave, A. Joulin, and T. Mikolov, “Enriching word vectors with subword information,” Trans. Assoc. Comput. Linguistics, vol. 5, pp. 135–146, 2017.
+[24]D. Kakwani et al., “IndicNLPSuite: Monolingual corpora, evaluation benchmarks and pre-trained multilingual language models for Indian languages,” in Findings Assoc. Comput. Linguistics: EMNLP, 2020, pp. 4948–4961.
+[25]J. T. Molesworth, A Dictionary, Marathi and English, 2nd ed. Bombay, India: Bombay Education Society’s Press, 1857.
+[26]I. Loshchilov and F. Hutter, “Decoupled weight decay regularization,” in Proc. Int. Conf. Learn. Represent. (ICLR), 2019.
+[27]M. Popović, “chrF++: Words helping character n-grams,” in Proc. 2nd Conf. Mach. Transl. (WMT), 2017, pp. 612–618.

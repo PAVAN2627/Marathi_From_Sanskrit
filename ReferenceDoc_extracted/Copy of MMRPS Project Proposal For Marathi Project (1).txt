@@ -1,0 +1,150 @@
+Marathwada Mitra Mandal’s Research Promotion Scheme
+ on
+A Hybrid AI-Based Framework for Reconstructing the Evolution of Marathi from Sanskrit
+Submitted by
+Under Supervision of 
+Department of Information Technology
+Marathwada Mitra Mandal’s College of Engineering 
+Karvenagar Pune – 52
+Marathwada Mitra Mandal’s Research Promotion Scheme (MMRPS)
+Proposal for Seed Money
+Broad Subject: Artificial Intelligence and Natural Language Processing
+Sub Area: Computational Linguistics
+Technical Details of the Project
+Project Summary:
+Marathi, an Indo-Aryan language spoken by over 95 million people, evolved systematically from Sanskrit through intermediate stages such as Maharashtri Prakrit and Apabhraṃśa. While traditional historical linguistics has documented these transformations manually, there exists no computationally grounded, explainable AI framework that reconstructs Marathi lexical forms directly from Sanskrit roots using both linguistic theory and modern deep learning.
+This project proposes the development of a hybrid AI-based reconstruction framework that integrates rule-based historical phonology with neural sequence modelling to computationally simulate the evolution of Marathi from Sanskrit. Unlike conventional black-box neural translation systems, the proposed system will be linguistically constrained, interpretable, and explainable.
+The research will proceed in four integrated layers:
+Linguistic Rule Encoding LayerHistorical phonological and morphological transformation rules—such as vowel shifts, consonant simplifications, schwa deletion, assimilation, and morphophonemic alternations—will be formally encoded using computational rule engines. These rules will reflect known sound change laws observed in Indo-Aryan language evolution.
+Phoneme-Level Neural Modelling LayerA Transformer-based architecture will be trained at the phoneme level rather than word level, incorporating IPA-based feature embeddings. This allows the system to learn structural patterns of phonetic evolution instead of surface orthographic mapping.
+Semantic Drift Modelling LayerLanguage evolution involves not only phonetic change but also semantic shifts. The project will incorporate contrastive representation learning to capture semantic proximity between Sanskrit roots and their Marathi derivatives using contextual embeddings.
+Explainability and Traceability ModuleThe system will generate interpretable transformation steps, showing intermediate phonological stages. This addresses a major research gap in NLP by producing transparent outputs instead of opaque neural predictions.
+The project will result in:
+A curated Sanskrit–Marathi aligned lexical dataset
+A rule-aware Transformer reconstruction model
+Evaluation using Character Error Rate, Phonetic Edit Distance, BLEU/chrF scores, and expert linguistic validation
+An open-source research toolkit for computational historical linguistics
+Research publications in indexed journals
+This research contributes to three major domains:
+Explainable Artificial Intelligence (XAI) for low-resource languages
+Computational Historical Linguistics
+Digital Preservation of Indian Linguistic Heritage
+By combining AI with rigorous linguistic principles, the project aims to establish a foundational computational framework for modelling language evolution in Indic languages, creating future pathways for large-scale digital humanities research and multilingual AI systems.
+Keywords: Marathi Evolution, Sanskrit NLP, Explainable AI, Historical Linguistics, Transformer Models, Computational Philology 
+Current status of work in area:
+Research on historical language evolution has traditionally been conducted within the domain of comparative philology and historical linguistics. Classical scholars have systematically documented phonological, morphological, and syntactic transformations from Sanskrit to modern Indo-Aryan languages, including Marathi. Foundational linguistic works such as those by Masica (Indo-Aryan Languages) and subsequent philological studies provide descriptive accounts of sound change, vowel shifts, consonant simplification, assimilation, and morphological restructuring across Sanskrit → Prakrit → Apabhraṃśa → Marathi stages. However, these studies are largely manual, qualitative, and non-computational.
+With the rise of Natural Language Processing (NLP), modern approaches have focused primarily on machine translation and sequence-to-sequence modelling using neural architectures such as the Transformer. The landmark work Attention is All You Need by Ashish Vaswani et al. (2017) introduced Transformer-based models that now dominate language generation tasks. These architectures have been successfully applied to modern language translation, speech recognition, and text generation. However, they are optimized for contemporary high-resource language pairs and lack explicit modelling of historical sound laws.
+Pretrained multilingual models such as Google Research’s multilingual BERT and Indic language models have improved representation learning for Indian languages. Additionally, initiatives such as AI4Bharat have developed datasets and benchmarks for modern Indic NLP tasks. Despite these advancements, most efforts focus on present-day translation, sentiment analysis, or information retrieval, rather than diachronic language reconstruction.
+In computational historical linguistics, some international research has explored automated cognate detection and proto-language reconstruction using Bayesian phylogenetic models and sequence alignment algorithms. However, these methods are largely applied to Indo-European proto-language studies and are not specifically tailored to Sanskrit–Marathi evolution. Furthermore, they typically treat sound change statistically rather than incorporating linguistically grounded transformation rules.
+For Sanskrit NLP specifically, rule-based morphological analyzers and sandhi splitters exist, but they function primarily for grammatical parsing rather than modelling language evolution. Marathi NLP resources are comparatively limited and primarily focused on POS tagging, dependency parsing, and machine translation.
+A critical limitation of current AI systems is their lack of explainability. Neural models operate as black-box systems, providing outputs without transparent transformation pathways. In historical linguistics, however, traceability of sound change is essential. Existing machine translation models cannot justify why a particular Sanskrit root transforms into a specific Marathi form according to phonological laws.
+To date, there is:
+No integrated hybrid framework combining rule-based historical phonology with neural sequence modelling for Sanskrit–Marathi reconstruction
+No publicly available aligned Sanskrit–Marathi diachronic lexical dataset designed for AI training
+No explainable AI system that outputs intermediate linguistic transformation steps
+Limited research bridging Digital Humanities and modern deep learning for Indic historical reconstruction
+Therefore, while both historical linguistics and neural NLP have independently matured, their integration for computational modelling of Marathi evolution remains an unexplored and high-impact research opportunity.
+Research Gaps:
+Despite significant advancements in historical linguistics and modern Natural Language Processing (NLP), several critical gaps remain unaddressed in the context of Sanskrit–Marathi linguistic evolution. These gaps justify the need for the proposed research.
+3.1 Absence of Computational Framework for Marathi Evolution
+Although traditional philological studies document the evolution from Sanskrit to Marathi, there is no dedicated computational framework that systematically models this transition using artificial intelligence. Existing NLP systems focus on modern language translation rather than diachronic (historical) reconstruction.
+3.2 Lack of Hybrid Rule-Based + Neural Models
+Current neural architectures such as Transformer models operate as data-driven black-box systems. They do not explicitly encode phonological laws such as:
+Vowel weakening and schwa deletion
+Consonant cluster simplification
+Assimilation and morphophonemic alternation
+Prakrit and Apabhraṃśa intermediary transformations
+There is no hybrid model integrating linguistically grounded rules with neural learning for Sanskrit–Marathi mapping.
+3.3 Non-Availability of Aligned Diachronic Datasets
+There is no curated, machine-readable Sanskrit–Marathi aligned lexical dataset specifically designed for historical reconstruction tasks. Available corpora focus on modern translation, not evolutionary alignment across stages.
+3.4 Lack of Explainability in NLP Systems
+Modern NLP models generate outputs without providing interpretable transformation pathways. In historical linguistics, however, justification of sound change steps is essential. No existing AI system provides:
+Step-wise phonological traceability
+Intermediate reconstructed forms
+Linguistically interpretable reasoning
+3.5 Limited Modelling of Semantic Drift
+Language evolution involves semantic shifts along with phonetic change. Current systems do not model gradual meaning shifts between Sanskrit roots and modern Marathi derivatives using embedding-based semantic proximity measures.
+3.6 Underrepresentation of Indic Languages in Computational Historical Linguistics
+Most computational reconstruction research focuses on Proto-Indo-European or European language families. Indic languages, particularly Marathi, remain underrepresented in explainable AI-based diachronic modelling.
+3.7 No Integrated Digital Humanities Toolkit for Marathi
+There is currently no open-source research toolkit that integrates:
+Rule encoding
+Phoneme-level neural modelling
+Evaluation metrics
+Linguistic validation tools
+for computational historical reconstruction of Marathi.
+Summary of Identified Gaps
+The field lacks:
+A linguistically grounded AI reconstruction model
+A hybrid explainable architecture
+A curated Sanskrit–Marathi diachronic dataset
+Semantic drift modelling mechanisms
+An open-source computational framework for Marathi evolution
+Objectives of project (max 1500 characters)
+The primary objective of this project is to develop a hybrid, explainable AI framework for reconstructing the evolution of Marathi from Sanskrit using linguistically grounded computational methods.
+The objectives are:
+To design a hybrid architecture integrating rule-based historical phonology with Transformer-based neural sequence modelling.
+To formally encode Sanskrit–Marathi phonological and morphological transformation rules, including vowel shifts, consonant simplification, schwa deletion, and assimilation patterns.
+To develop a phoneme-level modelling approach using IPA-based feature embeddings for improved structural learning of sound change.
+To construct a curated Sanskrit–Marathi aligned lexical dataset suitable for diachronic reconstruction tasks.
+To model semantic drift between Sanskrit roots and Marathi derivatives using embedding-based similarity techniques.
+To implement an explainability module that generates interpretable, step-wise transformation outputs.
+To evaluate the system using computational metrics such as Character Error Rate, Phonetic Edit Distance, BLEU/chrF scores, along with expert linguistic validation.
+To release an open-source toolkit for computational historical linguistics focused on Marathi.
+Expected output and outcome of the proposal:
+Development of a hybrid AI-based reconstruction framework for modelling the evolution of Marathi from Sanskrit.
+Creation of a curated Sanskrit–Marathi aligned diachronic lexical dataset for computational research.
+Implementation of a rule-aware Transformer model integrating phonological rules with neural sequence learning.
+Development of an explainability module providing step-wise phonological transformation traces.
+Quantitative evaluation using Character Error Rate, Phonetic Edit Distance, BLEU/chrF scores, and qualitative expert linguistic validation.
+Publication of at least one research paper in a Scopus/SCI indexed journal and presentation at a national/international conference.
+Release of an open-source toolkit and documented dataset to support future research in computational historical linguistics.
+Strengthening institutional research capacity in Explainable AI and Indic NLP.
+Work Plan: 
+Work Methodology 
+The project will follow a structured, multi-phase methodology integrating linguistic theory with advanced AI modelling.
+Phase 1: Literature Review and Data Collection
+Conduct an extensive review of historical linguistics related to Sanskrit–Prakrit–Apabhraṃśa–Marathi evolution.
+Collect Sanskrit lexical roots and corresponding Marathi derivatives from dictionaries, linguistic texts, and digital corpora.
+Digitize and normalize data into a machine-readable format.
+Convert lexical forms into IPA-based phoneme representations for phonetic modelling.
+Phase 2: Linguistic Rule Encoding
+Identify systematic phonological and morphological transformation rules (e.g., vowel shifts, consonant cluster simplification, schwa deletion, assimilation).
+Formalize these rules using a computational rule engine.
+Develop a preprocessing module that generates rule-based intermediate transformations.
+Phase 3: Dataset Construction
+Create an aligned Sanskrit–Marathi diachronic lexical dataset.
+Annotate data with phonetic features and transformation tags.
+Split dataset into training, validation, and testing sets.
+Phase 4: Model Development
+Design a hybrid architecture integrating:
+Rule-based transformation outputs
+Transformer-based neural sequence modelling
+Implement phoneme-level embeddings using IPA features.
+Integrate rule-aware attention mechanisms to constrain neural predictions.
+Phase 5: Semantic Drift Modelling
+Apply embedding-based representation learning to capture semantic similarity between Sanskrit roots and Marathi forms.
+Use contrastive learning to model gradual meaning shifts.
+Phase 6: Evaluation and Validation
+Evaluate performance using:
+Character Error Rate (CER)
+Phonetic Edit Distance
+BLEU/chrF scores
+Conduct expert linguistic validation for interpretability and correctness.
+Phase 7: Deployment and Dissemination
+Develop an open-source research toolkit.
+Document datasets and models.
+Prepare research publication and final project report.
+Time Schedule of activities giving milestones through BAR diagram
+Budget Estimate
+References
+C. P. Masica, The Indo-Aryan Languages. Cambridge University Press, 1991.
+T. Burrow and M. B. Emeneau, A Dravidian Etymological Dictionary, 2nd ed. Oxford University Press, 1984.
+G. Cardona and D. Jain (Eds.), The Indo-Aryan Languages. Routledge, 2003.
+P. Kiparsky, “Phonological Change,” in The Handbook of Historical Linguistics, Blackwell, 2003.
+Vaswani et al., “Attention Is All You Need,” in Advances in Neural Information Processing Systems (NeurIPS), 2017.
+D. Jurafsky and J. H. Martin, Speech and Language Processing, 3rd ed., Pearson, 2023.
+J. Devlin et al., “BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding,” in Proceedings of NAACL-HLT, 2019.
+M. Artetxe, G. Labaka, and E. Agirre, “A Robust Self-Learning Method for Fully Unsupervised Cross-Lingual Mappings of Word Embeddings,” in ACL, 2018.
+R. Cotterell et al., “Paradigm Completion for Morphological Analysis,” in Transactions of the ACL, 2017.
+S. Bhat et al., “Indic NLP Resources and Tools for Low-Resource Languages,” AI4Bharat Initiative, 2020.
